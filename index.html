@@ -15,7 +15,7 @@
                         orange: '#FE5000',
                         slate: '#333F48',
                         ice: '#DBE2E9',
-                        surface: '#F4F7F9'
+                        surface: '#F8FAFC'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
@@ -26,6 +26,7 @@
         }
     </script>
     <style>
+        /* Zero outer padding and suppressed scrollbars for seamless Mindsmith iframe embed */
         html, body {
             margin: 0;
             padding: 0;
@@ -34,214 +35,162 @@
             height: 100%;
             -webkit-font-smoothing: antialiased;
         }
-        /* Suppress standard scrollbars */
         ::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; }
 
-        @keyframes subtlePulse {
-            0%, 100% { opacity: 0.35; transform: scale(0.98); }
-            50% { opacity: 0.9; transform: scale(1.02); }
-        }
-        .pulse-subtle {
-            animation: subtlePulse 2.8s ease-in-out infinite;
-        }
         .transition-all-smooth {
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
 </head>
 <body class="bg-white text-slate font-sans select-none h-full flex flex-col justify-between">
-    <div id="app" class="h-full w-full max-w-5xl mx-auto flex flex-col border border-ice/80 rounded-xl shadow-md overflow-hidden bg-white">
+    <div id="app" class="h-full w-full mx-auto flex flex-col border border-ice/80 rounded-lg shadow-sm overflow-hidden bg-white">
         
-        <!-- Clinical Header Bar -->
-        <header class="bg-navy text-white px-4 py-2.5 flex items-center justify-between border-b border-ice/20 shrink-0">
-            <div class="flex items-center space-x-2.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-orange animate-ping"></span>
-                <span class="text-xs font-bold tracking-wider uppercase text-ice">NHS General Practice Console</span>
+        <!-- Top Console Header Bar -->
+        <header class="bg-navy text-white px-4 py-2 flex items-center justify-between border-b border-ice/20 shrink-0">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-orange animate-pulse"></span>
+                <span class="text-xs font-bold tracking-wider uppercase text-ice">NHS Primary Care Telemetry</span>
                 <span class="text-ice/40 text-xs">|</span>
-                <span class="text-xs font-semibold text-white/90">GP Premium Proactive Outreach Telemetry</span>
+                <span class="text-xs font-medium text-white/90">Dr. Lindsay Dubock — Clinical Briefing</span>
             </div>
             <div class="flex items-center space-x-3 text-xs">
-                <span class="hidden sm:inline-block px-2 py-0.5 rounded bg-white/10 text-ice/90 font-mono">Dr. Lindsay Dubock — Clinical Briefing</span>
-                <span id="sessionTimer" class="font-mono text-orange font-semibold">00:00</span>
+                <span class="px-2 py-0.5 rounded bg-white/10 text-ice/90 font-mono text-[11px]">GP Premium Context</span>
+                <span id="sessionTimer" class="font-mono text-orange font-bold">00:00</span>
             </div>
         </header>
 
+        <!-- Center Console Workspace -->
         <div class="flex flex-1 min-h-0 bg-surface">
             
-            <!-- Left Workspace: The Proactive Cohort Telemetry Queue (Kinesthetic & Visual) -->
-            <section class="w-72 border-r border-ice bg-white flex flex-col justify-between p-3 shrink-0 hidden md:flex">
+            <!-- Left: GP Premium Outreach Cohorts (Visual & Kinesthetic Context for Slide 1) -->
+            <section class="w-64 border-r border-ice bg-white flex flex-col justify-between p-3 shrink-0 hidden sm:flex">
                 <div>
-                    <div class="flex items-center justify-between pb-2 mb-2 border-b border-ice/60">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate/70">Unsolicited Cohort Queue</span>
-                        <span class="text-[10px] bg-ice/60 text-navy font-semibold px-1.5 py-0.5 rounded">Proactive Dialling</span>
+                    <div class="flex items-center justify-between pb-1.5 mb-2 border-b border-ice/60">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate/70">Unsolicited Cohorts</span>
+                        <span class="text-[9px] bg-ice/60 text-navy font-semibold px-1.5 py-0.2 rounded">Outbound</span>
                     </div>
 
-                    <div class="space-y-2" id="cohortList">
-                        <!-- Cohort Card 1 -->
-                        <div id="cohort-1" class="p-2.5 rounded-lg border border-orange/40 bg-orange/5 transition-all-smooth cursor-pointer">
-                            <div class="flex justify-between items-center text-[10px] font-bold text-orange mb-1">
-                                <span>COHORT A • BMI > 35</span>
-                                <span class="bg-orange/20 px-1 py-0.2 rounded">HIGH RESISTANCE</span>
+                    <div class="space-y-1.5" id="cohortList">
+                        <!-- Cohort 1 -->
+                        <div id="cohort-1" class="p-2 rounded border border-orange/40 bg-orange/5 transition-all-smooth">
+                            <div class="flex justify-between items-center text-[9px] font-bold text-orange mb-0.5">
+                                <span>COHORT A • WEIGHT</span>
+                                <span class="bg-orange/20 px-1 py-0.2 rounded text-[8px]">BMI > 35</span>
                             </div>
-                            <div class="text-xs font-semibold text-navy">Weight Management Outreach</div>
-                            <div class="text-[11px] text-slate/80 mt-1 italic leading-tight">"Did not request contact. Defensiveness triggered in first 8 seconds."</div>
+                            <div class="text-[11px] font-semibold text-navy">Weight Management Outreach</div>
+                            <div class="text-[10px] text-slate/75 italic leading-tight mt-0.5">"Did not ask for contact. Defensiveness fires early."</div>
                         </div>
 
-                        <!-- Cohort Card 2 -->
-                        <div id="cohort-2" class="p-2.5 rounded-lg border border-ice bg-white hover:border-trust/40 transition-all-smooth cursor-pointer">
-                            <div class="flex justify-between items-center text-[10px] font-bold text-trust mb-1">
-                                <span>COHORT B • MULTI-LTC</span>
-                                <span class="bg-ice px-1 py-0.2 rounded text-slate">FATIGUED</span>
+                        <!-- Cohort 2 -->
+                        <div id="cohort-2" class="p-2 rounded border border-ice bg-white transition-all-smooth">
+                            <div class="flex justify-between items-center text-[9px] font-bold text-trust mb-0.5">
+                                <span>COHORT B • LTCs</span>
+                                <span class="bg-ice px-1 py-0.2 rounded text-[8px] text-slate">3+ DIAGNOSES</span>
                             </div>
-                            <div class="text-xs font-semibold text-navy">Complex Chronic Reviews</div>
-                            <div class="text-[11px] text-slate/80 mt-1 italic leading-tight">"3+ conditions. Exhausted by reviews. Distrusts non-GP staff."</div>
+                            <div class="text-[11px] font-semibold text-navy">Complex Chronic Reviews</div>
+                            <div class="text-[10px] text-slate/75 italic leading-tight mt-0.5">"Exhausted by review letters. High call fatigue."</div>
                         </div>
 
-                        <!-- Cohort Card 3 -->
-                        <div id="cohort-3" class="p-2.5 rounded-lg border border-ice bg-white hover:border-trust/40 transition-all-smooth cursor-pointer">
-                            <div class="flex justify-between items-center text-[10px] font-bold text-slate/70 mb-1">
-                                <span>COHORT C • FRAILTY REVIEW</span>
-                                <span class="bg-ice px-1 py-0.2 rounded text-slate">GUARDED</span>
+                        <!-- Cohort 3 -->
+                        <div id="cohort-3" class="p-2 rounded border border-ice bg-white transition-all-smooth">
+                            <div class="flex justify-between items-center text-[9px] font-bold text-slate/70 mb-0.5">
+                                <span>COHORT C • ROUTINE</span>
+                                <span class="bg-ice px-1 py-0.2 rounded text-[8px] text-slate">OVERDUE</span>
                             </div>
-                            <div class="text-xs font-semibold text-navy">Overdue Routine Checks</div>
-                            <div class="text-[11px] text-slate/80 mt-1 italic leading-tight">"Suspicious of cold-call. Identity threat present immediately."</div>
+                            <div class="text-[11px] font-semibold text-navy">Proactive Clinical Recalls</div>
+                            <div class="text-[10px] text-slate/75 italic leading-tight mt-0.5">"Suspicious of unannounced calls from surgery."</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- The Predictability Meter (Kolb Conceptualization Anchor) -->
-                <div class="bg-ice/30 rounded-lg p-2.5 border border-ice/70">
-                    <div class="flex justify-between text-[11px] font-bold text-navy mb-1.5">
-                        <span>Hostility Diagnostic Meter</span>
-                        <span id="meterPercent" class="text-orange">35%</span>
+                <!-- Slide 1 Core Premise Dial (Predictability Anchor) -->
+                <div class="bg-ice/20 rounded p-2 border border-ice/60 mt-2">
+                    <div class="flex justify-between text-[10px] font-bold text-navy mb-1">
+                        <span>Predictability Metric</span>
+                        <span id="meterPercent" class="text-orange font-mono">0%</span>
                     </div>
-                    <div class="w-full h-2 bg-ice rounded-full overflow-hidden mb-1.5">
-                        <div id="meterBar" class="h-full bg-trust transition-all duration-700 ease-out" style="width: 35%;"></div>
+                    <div class="w-full h-1.5 bg-ice rounded-full overflow-hidden mb-1">
+                        <div id="meterBar" class="h-full bg-trust transition-all duration-500 ease-out" style="width: 10%;"></div>
                     </div>
-                    <div class="flex justify-between text-[9px] text-slate/70 font-medium">
-                        <span>Personal Attack</span>
-                        <span class="text-trust font-bold">Predictable Data</span>
+                    <div class="flex justify-between text-[8px] text-slate/60 font-medium">
+                        <span>Chaotic Attack</span>
+                        <span class="text-trust font-bold">Predictable Data (90%+)</span>
                     </div>
                 </div>
             </section>
 
-            <!-- Center Stage: Dynamic Audio Visualizer & Synced Text Telemetry -->
-            <main class="flex-1 flex flex-col justify-between p-4 sm:p-5 overflow-hidden">
+            <!-- Center: Audio Visualizer & Synced Dynamic Script Delivery -->
+            <main class="flex-1 flex flex-col justify-between p-3 sm:p-4 overflow-hidden">
                 
-                <!-- Clinical Status Banner -->
-                <div class="flex items-center justify-between bg-white border border-ice/70 rounded-lg p-3 shadow-sm">
-                    <div class="flex items-center space-x-3">
-                        <div class="relative flex items-center justify-center">
-                            <div class="w-3 h-3 rounded-full bg-trust"></div>
-                            <div class="absolute w-5 h-5 rounded-full bg-trust/30 animate-ping"></div>
-                        </div>
-                        <div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider text-trust">Audio Channel: Active</span>
-                            <h3 class="text-xs sm:text-sm font-bold text-navy">Framing: The Ground Has Shifted in Primary Care</h3>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-[11px] font-mono font-medium text-slate bg-ice/40 px-2 py-1 rounded">Part 1 & 2 Sync</span>
-                    </div>
-                </div>
-
-                <!-- Live Canvas Waveform & Interactive Telemetry -->
-                <div class="my-3 bg-navy rounded-xl p-4 text-white relative flex flex-col justify-between shadow-inner h-44">
-                    <div class="flex justify-between items-center z-10">
-                        <span class="text-[10px] font-mono uppercase tracking-widest text-ice/70 flex items-center">
+                <!-- Audio Frequency Waveform Display -->
+                <div class="bg-navy rounded-lg p-3 text-white relative flex flex-col justify-between shadow-inner h-36">
+                    <div class="flex justify-between items-center z-10 mb-1">
+                        <span class="text-[9px] font-mono uppercase tracking-widest text-ice/70 flex items-center">
                             <span class="inline-block w-1.5 h-1.5 bg-orange rounded-full mr-1.5"></span>
                             Voicebox Frequency Monitor (Dr. Lindsay)
                         </span>
-                        <span id="playbackPhaseBadge" class="text-[10px] bg-trust/60 text-white font-bold px-2 py-0.5 rounded tracking-wide">
-                            READY
+                        <span id="playbackPhaseBadge" class="text-[9px] bg-trust/60 text-white font-bold px-2 py-0.5 rounded tracking-wider uppercase font-mono">
+                            Part 1 Ready
                         </span>
                     </div>
 
-                    <!-- Visualizer Canvas -->
-                    <canvas id="waveformCanvas" class="w-full h-16 my-auto z-10"></canvas>
+                    <!-- Live Waveform Canvas -->
+                    <canvas id="waveformCanvas" class="w-full h-14 my-auto z-10"></canvas>
 
-                    <!-- Real-time dynamic quote reveal (Read/Write VARK Component) -->
-                    <div class="z-10 bg-black/40 backdrop-blur-sm border border-white/10 p-2.5 rounded-lg">
-                        <p id="liveTranscript" class="text-xs sm:text-sm text-ice font-medium italic transition-all duration-300">
-                            "Click 'Begin Clinical Briefing' to hear Dr. Lindsay Dubock contextualize proactive outbound outreach..."
+                    <!-- Real-Time Synchronized Telemetry Transcript -->
+                    <div class="z-10 bg-black/50 backdrop-blur-xs border border-white/10 p-2 rounded">
+                        <p id="liveTranscript" class="text-xs text-ice font-medium italic transition-all duration-200">
+                            "Click 'Start Clinical Briefing' to hear Dr. Lindsay Dubock frame proactive outreach under the GP Premium..."
                         </p>
                     </div>
                 </div>
 
-                <!-- The Waterline Interactive Reveal (Kinesthetic & Conceptual) -->
-                <div class="bg-white border border-ice rounded-xl p-3 shadow-sm flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Slide 1 Core Insight Card: The Waterline Shift -->
+                <div class="bg-white border border-ice rounded-lg p-2.5 shadow-xs flex items-center justify-between mt-2">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-7 h-7 rounded bg-orange/10 flex items-center justify-center text-orange shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                             </svg>
                         </div>
                         <div>
-                            <div class="text-[11px] font-bold text-navy uppercase tracking-wider">The Diagnostic Shift</div>
-                            <div id="waterlineSnippet" class="text-xs text-slate">
-                                Above the waterline: Hostility, sarcasm, and cold pushback.
+                            <div class="text-[10px] font-bold text-navy uppercase tracking-wider">The Diagnostic Reframing</div>
+                            <div class="text-[11px] text-slate leading-tight">
+                                Hostility is not a personal confrontation. It is an unexpressed signal.
                             </div>
                         </div>
                     </div>
-                    <button id="toggleWaterlineBtn" onclick="toggleWaterlineModal()" class="px-3 py-1.5 bg-ice/50 hover:bg-ice text-navy font-semibold text-xs rounded-lg transition-colors border border-ice flex items-center space-x-1.5">
-                        <span>Inspect Waterline</span>
-                    </button>
+                    <span class="hidden sm:inline-block px-2 py-1 bg-ice/40 text-navy font-semibold text-[10px] rounded border border-ice">
+                        Over 90% Predictable
+                    </span>
                 </div>
 
             </main>
         </div>
 
-        <!-- Footer: Dual Audio Controls & Playback Action -->
-        <footer class="bg-white border-t border-ice px-4 py-3 flex items-center justify-between shrink-0">
-            <div class="flex items-center space-x-3">
-                <button id="masterPlayBtn" onclick="togglePlay()" class="h-10 px-5 bg-trust hover:bg-trust/90 text-white font-semibold text-xs sm:text-sm rounded-lg shadow-sm flex items-center space-x-2 transition-all active:scale-95">
-                    <svg id="playIcon" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <!-- Footer Audio Controls -->
+        <footer class="bg-white border-t border-ice px-3 py-2.5 flex items-center justify-between shrink-0">
+            <div class="flex items-center space-x-2.5">
+                <button id="masterPlayBtn" onclick="togglePlay()" class="h-8 px-4 bg-trust hover:bg-trust/90 text-white font-semibold text-xs rounded shadow-xs flex items-center space-x-1.5 transition-all active:scale-95 cursor-pointer">
+                    <svg id="playIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
-                    <span id="playBtnText">Begin Clinical Briefing</span>
+                    <span id="playBtnText">Start Clinical Briefing</span>
                 </button>
 
                 <div class="flex flex-col">
-                    <span class="text-[11px] font-bold text-navy" id="statusLabel">Audio Idle</span>
-                    <span class="text-[10px] text-slate/70">Vocal Pacing: Unhurried Peer-to-Peer</span>
+                    <span class="text-[10px] font-bold text-navy" id="statusLabel">Audio Idle</span>
+                    <span class="text-[9px] text-slate/70">Unhurried Peer-to-Peer Pace</span>
                 </div>
             </div>
 
-            <!-- Maxim Pill Indicator -->
-            <div class="hidden sm:flex items-center space-x-2 bg-orange/10 border-l-4 border-orange px-3 py-1.5 rounded-r">
-                <span class="text-[11px] font-bold text-navy tracking-tight">Maxim:</span>
-                <span class="text-[11px] text-slate font-medium">Hostility is clinical data, not a personal attack.</span>
+            <!-- Slide 1 Action Maxim (Orange bar, Navy text) -->
+            <div class="flex items-center space-x-1.5 bg-orange/5 border-l-3 border-orange px-2.5 py-1 rounded-r">
+                <span class="text-[10px] font-bold text-navy uppercase tracking-wider">Maxim:</span>
+                <span class="text-[10px] text-navy font-medium italic">Hostility is clinical data, not a personal attack.</span>
             </div>
         </footer>
-
-        <!-- Modal: Beneath the Waterline Diagnostic Lightbox -->
-        <div id="waterlineModal" class="fixed inset-0 bg-navy/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-            <div class="bg-white border border-ice rounded-xl shadow-2xl max-w-lg w-full overflow-hidden">
-                <div class="bg-navy p-4 text-white flex justify-between items-center border-b border-ice/20">
-                    <h3 class="text-sm font-bold tracking-wide uppercase">Beneath the Waterline: Diagnostic Cross-Section</h3>
-                    <button onclick="toggleWaterlineModal()" class="text-ice hover:text-white text-lg font-bold">&times;</button>
-                </div>
-                <div class="p-5 space-y-4">
-                    <div class="border-l-4 border-orange bg-orange/5 p-3 rounded-r">
-                        <div class="text-[10px] uppercase font-bold text-orange">Above The Waterline (What Fires First)</div>
-                        <p class="text-xs text-navy font-semibold mt-0.5">Hostility • Sarcasm • Cold Dismissal • "Why are you calling me?"</p>
-                    </div>
-                    <div class="border-l-4 border-trust bg-trust/5 p-3 rounded-r">
-                        <div class="text-[10px] uppercase font-bold text-trust">Below The Waterline (The 4 Hidden Drivers)</div>
-                        <ul class="text-xs text-slate space-y-1 mt-1">
-                            <li><strong>1. Fear & Clinical Anxiety:</strong> Panic about unannounced diagnosis.</li>
-                            <li><strong>2. Loss of Autonomy:</strong> Weariness from chronic disease management.</li>
-                            <li><strong>3. Shame & Identity Threat:</strong> Being flagged for weight management.</li>
-                            <li><strong>4. Past Trauma:</strong> Learned defensiveness from system friction.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="bg-surface px-5 py-3 border-t border-ice flex justify-end">
-                    <button onclick="toggleWaterlineModal()" class="px-4 py-1.5 bg-navy text-white text-xs font-bold rounded hover:bg-navy/90">Return to Briefing</button>
-                </div>
-            </div>
-        </div>
 
     </div>
 
@@ -254,15 +203,16 @@
         let audioSource = null;
         let analyser = null;
 
-        // HTML5 Audio Elements for Voicebox Files (GitHub/Vercel relative path)
+        // Slide 1 Audio Files (Sequenced Part 1 -> Part 2)
         const audioPart1 = new Audio('./audio/HD_S01_Lindsay_Part1.wav');
         const audioPart2 = new Audio('./audio/HD_S01_Lindsay_Part2.wav');
         let currentAudio = audioPart1;
 
-        // Auto-sequence Part 1 into Part 2
+        // Auto-advance Part 1 into Part 2
         audioPart1.addEventListener('ended', () => {
             currentAudio = audioPart2;
             audioPart2.play();
+            document.getElementById('playbackPhaseBadge').innerText = "Part 2 Active";
             connectAudioNode(audioPart2);
         });
 
@@ -270,30 +220,27 @@
             resetPlayback();
         });
 
-        // Script Timeline synced with Dr. Lindsay's Voicebox Delivery
+        // Script Timeline for Slide 1 (Bite-sized beats matching Dr. Lindsay's Voicebox delivery)
         const scriptBeats = [
-            { time: 0, text: "Welcome. I’m Dr. Lindsay Dubock.", meter: 35, cohort: "cohort-1" },
-            { time: 4, text: "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium.", meter: 45, cohort: "cohort-1" },
+            { time: 0, text: "Welcome. I’m Dr. Lindsay Dubock.", meter: 25, cohort: "cohort-1" },
+            { time: 4, text: "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium.", meter: 40, cohort: "cohort-1" },
             { time: 11, text: "We are picking up the phone to patients who did not ask us to call.", meter: 55, cohort: "cohort-1" },
-            { time: 16, text: "Complex long-term conditions... Weight management cohorts...", meter: 65, cohort: "cohort-2" },
-            { time: 22, text: "People who are already exhausted, defensive, or guarded before you even finish your name.", meter: 72, cohort: "cohort-3" },
-            { time: 29, text: "Over ninety percent of that pushback is entirely predictable.", meter: 88, cohort: "cohort-3" },
-            { time: 35, text: "And if it can be predicted — it can be intercepted.", meter: 92, cohort: "cohort-1" },
-            { time: 39, text: "Today is not about customer service scripts or telling you to 'stay positive.'", meter: 94, cohort: "cohort-2" },
-            { time: 44, text: "It is about seeing patient hostility for what it really is: clinical data — not a personal attack.", meter: 98, cohort: "cohort-3" },
-            { time: 50, text: "Let's look at what's really happening beneath the waterline.", meter: 100, cohort: "cohort-1" }
+            { time: 16, text: "Complex long-term conditions... Weight management cohorts...", meter: 68, cohort: "cohort-2" },
+            { time: 22, text: "People who are already exhausted, defensive, or guarded before you even finish your name.", meter: 78, cohort: "cohort-3" },
+            { time: 28, text: "Over ninety percent of that pushback is entirely predictable.", meter: 90, cohort: "cohort-3" },
+            { time: 34, text: "And if it can be predicted — it can be intercepted.", meter: 93, cohort: "cohort-1" },
+            { time: 38, text: "Today is not about customer service scripts or telling you to 'stay positive.'", meter: 95, cohort: "cohort-2" },
+            { time: 43, text: "It is about seeing patient hostility for what it really is: clinical data — not a personal attack.", meter: 98, cohort: "cohort-3" },
+            { time: 49, text: "Let's look at what's really happening beneath the waterline.", meter: 100, cohort: "cohort-1" }
         ];
 
-        const totalDuration = 54; // seconds
-
-        // Visualizer Canvas setup
+        // Canvas Waveform Visualizer
         const canvas = document.getElementById('waveformCanvas');
         const ctx = canvas.getContext('2d');
-        let visualizerAnimFrame = null;
 
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight - 40;
+            canvas.height = canvas.parentElement.clientHeight - 30;
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
@@ -302,31 +249,30 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const width = canvas.width;
             const height = canvas.height;
-            const bars = 48;
+            const bars = 40;
             const barWidth = width / bars - 2;
 
             for (let i = 0; i < bars; i++) {
-                const heightMultiplier = isPlaying ? Math.sin(Date.now() * 0.005 + i * 0.25) * 0.5 + 0.5 : 0.08;
-                const barHeight = Math.max(3, heightMultiplier * (height * 0.85));
+                const heightMultiplier = isPlaying ? Math.sin(Date.now() * 0.006 + i * 0.3) * 0.5 + 0.5 : 0.08;
+                const barHeight = Math.max(2, heightMultiplier * (height * 0.8));
                 const x = i * (barWidth + 2);
                 const y = (height - barHeight) / 2;
 
-                // Alternate between Trust Blue and TTN Action Orange
-                if (i > 30 && isPlaying) {
-                    ctx.fillStyle = '#FE5000'; // TTN Orange highlight
+                if (i > 26 && isPlaying) {
+                    ctx.fillStyle = '#FE5000'; // TTN Action Orange highlight
                 } else {
                     ctx.fillStyle = '#005EB8'; // TTN Trust Blue
                 }
                 ctx.beginPath();
-                ctx.roundRect(x, y, barWidth, barHeight, 2);
+                ctx.roundRect(x, y, barWidth, barHeight, 1.5);
                 ctx.fill();
             }
 
-            visualizerAnimFrame = requestAnimationFrame(drawWaveform);
+            requestAnimationFrame(drawWaveform);
         }
         drawWaveform();
 
-        // Audio Ambience & Synth Cues (Using Web Audio API to prevent external dependencies)
+        // Audio Context setup for local waveform inspection
         function initAudio() {
             if (!audioContext) {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -342,14 +288,13 @@
                     audioSource.connect(analyser);
                     analyser.connect(audioContext.destination);
                 }
-            } catch (err) {
-                console.log('Audio already bound to node', err);
+            } catch (e) {
+                // Audio already connected
             }
         }
 
         function togglePlay() {
             initAudio();
-
             if (isPlaying) {
                 pausePlayback();
             } else {
@@ -359,30 +304,30 @@
 
         function startPlayback() {
             isPlaying = true;
-            document.getElementById('playBtnText').innerText = "Pause Clinical Briefing";
-            document.getElementById('statusLabel').innerText = "Vocal Telemetry Running";
-            document.getElementById('playbackPhaseBadge').innerText = "LIVE STREAM";
+            document.getElementById('playBtnText').innerText = "Pause Briefing";
+            document.getElementById('statusLabel').innerText = "Voicebox Audio Active";
+            document.getElementById('playbackPhaseBadge').innerText = currentAudio === audioPart1 ? "Part 1 Streaming" : "Part 2 Streaming";
             document.getElementById('playbackPhaseBadge').classList.replace('bg-trust/60', 'bg-orange');
             document.getElementById('playIcon').innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
 
-            // Play the current audio track
-            currentAudio.play().catch(e => console.log('Playback error:', e));
+            currentAudio.play().catch(err => console.log('Audio playback waiting for interaction:', err));
             connectAudioNode(currentAudio);
 
             playheadInterval = setInterval(() => {
-                playheadTime = Math.floor(currentAudio === audioPart1 ? currentAudio.currentTime : (audioPart1.duration || 24) + currentAudio.currentTime);
+                const part1Offset = audioPart1.duration || 23;
+                playheadTime = Math.floor(currentAudio === audioPart1 ? currentAudio.currentTime : part1Offset + currentAudio.currentTime);
                 updateTimerDisplay(playheadTime);
                 syncScriptWithTime(playheadTime);
-            }, 500);
+            }, 300);
         }
 
         function pausePlayback() {
             isPlaying = false;
             clearInterval(playheadInterval);
             currentAudio.pause();
-            document.getElementById('playBtnText').innerText = "Resume Clinical Briefing";
+            document.getElementById('playBtnText').innerText = "Resume Briefing";
             document.getElementById('statusLabel').innerText = "Audio Paused";
-            document.getElementById('playbackPhaseBadge').innerText = "PAUSED";
+            document.getElementById('playbackPhaseBadge').innerText = "Paused";
             document.getElementById('playbackPhaseBadge').classList.replace('bg-orange', 'bg-trust/60');
             document.getElementById('playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
         }
@@ -395,10 +340,9 @@
             playheadTime = 0;
             updateTimerDisplay(0);
             document.getElementById('playBtnText').innerText = "Replay Briefing";
-            document.getElementById('playbackPhaseBadge').innerText = "COMPLETED";
-            document.getElementById('meterPercent').innerText = "90%+ Predictable";
+            document.getElementById('playbackPhaseBadge').innerText = "Completed";
+            document.getElementById('meterPercent').innerText = "90%+";
             document.getElementById('meterBar').style.width = "95%";
-            document.getElementById('meterBar').classList.add('bg-orange');
         }
 
         function updateTimerDisplay(sec) {
@@ -407,34 +351,26 @@
             document.getElementById('sessionTimer').innerText = `${m}:${s}`;
         }
 
-        function syncScriptWithTime(currentSeconds) {
-            // Find current active beat
+        function syncScriptWithTime(seconds) {
             for (let i = scriptBeats.length - 1; i >= 0; i--) {
-                if (currentSeconds >= scriptBeats[i].time) {
+                if (seconds >= scriptBeats[i].time) {
                     const beat = scriptBeats[i];
                     
-                    // Update transcript text with transition
                     const transcriptEl = document.getElementById('liveTranscript');
                     if (transcriptEl.innerText !== `"${beat.text}"`) {
-                        transcriptEl.style.opacity = '0.3';
-                        setTimeout(() => {
-                            transcriptEl.innerText = `"${beat.text}"`;
-                            transcriptEl.style.opacity = '1';
-                        }, 150);
+                        transcriptEl.innerText = `"${beat.text}"`;
                     }
 
-                    // Update Hostility-to-Data meter
                     document.getElementById('meterPercent').innerText = `${beat.meter}%`;
                     document.getElementById('meterBar').style.width = `${beat.meter}%`;
 
-                    // Highlight Active Cohort Card
                     ['cohort-1', 'cohort-2', 'cohort-3'].forEach(id => {
                         const el = document.getElementById(id);
                         if (id === beat.cohort) {
-                            el.classList.add('border-orange', 'bg-orange/5', 'shadow-sm');
+                            el.classList.add('border-orange/60', 'bg-orange/5');
                             el.classList.remove('border-ice', 'bg-white');
                         } else {
-                            el.classList.remove('border-orange', 'bg-orange/5', 'shadow-sm');
+                            el.classList.remove('border-orange/60', 'bg-orange/5');
                             el.classList.add('border-ice', 'bg-white');
                         }
                     });
@@ -443,23 +379,6 @@
                 }
             }
         }
-
-        // Waterline Modal Handlers
-        function toggleWaterlineModal() {
-            const modal = document.getElementById('waterlineModal');
-            modal.classList.toggle('hidden');
-        }
-
-        // Cohort Click Interaction
-        document.querySelectorAll('#cohortList > div').forEach((card, index) => {
-            card.addEventListener('click', () => {
-                const targetBeats = [1, 16, 22];
-                playheadTime = targetBeats[index];
-                updateTimerDisplay(playheadTime);
-                syncScriptWithTime(playheadTime);
-                playMedicalChime();
-            });
-        });
     </script>
 </body>
 </html>
