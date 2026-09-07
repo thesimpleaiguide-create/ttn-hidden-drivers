@@ -25,7 +25,6 @@
         }
     </script>
     <style>
-        /* Zero outer padding and suppressed scrollbars for seamless Mindsmith iframe embed */
         html, body {
             margin: 0;
             padding: 0;
@@ -37,175 +36,207 @@
         ::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; }
 
-        @keyframes subtlePulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.04); opacity: 1; }
+        .active-word-highlight {
+            background-color: rgba(254, 80, 0, 0.15);
+            color: #0C2340;
+            font-weight: 700;
+            border-bottom: 2px solid #FE5000;
+            transition: all 0.25s ease;
         }
-        .animate-subtle-pulse {
-            animation: subtlePulse 3s ease-in-out infinite;
+        .dim-word {
+            color: #718096;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body class="bg-white text-slate font-sans select-none h-full flex flex-col justify-between">
+<body class="bg-white text-slate font-sans select-none h-full flex flex-col justify-center p-3 sm:p-4">
 
-    <div id="app" class="h-full w-full mx-auto flex flex-col border border-ice/80 rounded-xl shadow-xs overflow-hidden bg-white">
+    <!-- Card Container -->
+    <div class="w-full max-w-4xl mx-auto bg-cream/60 border border-ice/80 rounded-2xl shadow-xs overflow-hidden flex flex-col md:flex-row relative">
         
-        <!-- Calm Top Banner -->
-        <header class="bg-navy text-white px-5 py-2.5 flex items-center justify-between border-b border-ice/20 shrink-0">
-            <div class="flex items-center space-x-2.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-orange animate-pulse"></span>
-                <span class="text-xs font-semibold tracking-wider uppercase text-ice/90">The Training Network</span>
-                <span class="text-ice/40 text-xs">•</span>
-                <span class="text-xs font-medium text-white">Dr. Lindsay Dubock</span>
+        <!-- Left / Center: Personal Written Introduction -->
+        <div class="flex-1 p-5 sm:p-7 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center space-x-2 text-[11px] font-bold tracking-wider text-trust uppercase mb-3">
+                    <span class="w-2 h-2 rounded-full bg-orange animate-pulse"></span>
+                    <span>Direct Guidance • Primary Care Outreach</span>
+                </div>
+
+                <div class="space-y-3 text-slate/90 text-sm sm:text-[15px] leading-relaxed font-normal">
+                    <p class="font-semibold text-navy text-base sm:text-lg">
+                        I want to talk to you about the calls that go wrong.
+                    </p>
+                    <p>
+                        Not the ones where someone's difficult for no reason. The ones where you dial, say the practice name, and it falls apart before you've finished your sentence.
+                    </p>
+                    <p>
+                        This course is for the people who make those calls — care coordinators, link workers, anyone doing proactive outreach under GP Premium.
+                    </p>
+                    <p class="text-slate/75 italic">
+                        We'll take it slowly. One phase at a time.
+                    </p>
+                </div>
             </div>
-            
-            <div class="flex items-center space-x-3">
-                <span id="audioSourceBadge" class="text-[10px] bg-white/10 text-ice/80 px-2 py-0.5 rounded font-mono">
-                    Ready to Play
-                </span>
-                <!-- Optional Local File Test Picker -->
-                <label for="localFileInput" class="cursor-pointer text-ice/60 hover:text-white transition-colors" title="Test with your local Voicebox .wav file">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+
+            <!-- Action Bar with Audio Pop-out Icon Button -->
+            <div class="mt-5 pt-4 border-t border-ice flex items-center justify-between">
+                <div class="text-xs font-semibold text-navy">
+                    Dr. Lindsay Dubock
+                    <span class="block text-[11px] font-normal text-slate/60">Director, The Training Network</span>
+                </div>
+
+                <button onclick="openAudioModal()" 
+                        class="group inline-flex items-center space-x-2.5 bg-navy hover:bg-trust text-white px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 shadow-sm hover:shadow active:scale-95 cursor-pointer">
+                    <!-- Headset/Audio Soundwave Icon -->
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-orange"></span>
+                    </span>
+                    <svg class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
                     </svg>
-                    <input type="file" id="localFileInput" accept="audio/*" class="hidden" onchange="handleManualAudioFile(event)">
-                </label>
+                    <span>Listen to Clinical Briefing</span>
+                </button>
             </div>
-        </header>
+        </div>
 
-        <main class="flex-1 flex flex-col md:flex-row items-center justify-between p-5 md:p-6 gap-5 bg-cream/50 min-h-0 overflow-hidden">
-            
-            <!-- Left: Tactile Play Hub & Subtle Waveform Ring -->
-            <div class="flex flex-col items-center justify-center shrink-0 w-full md:w-56 text-center">
-                <div class="relative flex items-center justify-center mb-3">
-                    <!-- Ambient Sound Ripple -->
-                    <div id="rippleRing" class="absolute w-24 h-24 rounded-full border border-trust/30 opacity-0 transition-all duration-700"></div>
-                    
-                    <!-- Main Play Button -->
-                    <button id="masterPlayBtn" onclick="handleMasterPlayToggle()" 
-                            class="relative z-10 w-16 h-16 rounded-full bg-navy hover:bg-trust text-white shadow-md flex items-center justify-center transition-all duration-300 active:scale-95 focus:outline-none group cursor-pointer">
-                        <svg id="playIcon" class="w-6 h-6 ml-0.5 fill-current transition-transform group-hover:scale-105" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="font-mono text-sm font-semibold text-navy" id="timerLabel">00:00</div>
-                <div class="text-[11px] text-slate/70 mt-0.5 font-medium" id="statusPrompt">Click to hear Dr. Lindsay</div>
+        <!-- Right Column: Dr. Lindsay Portrait -->
+        <div class="w-full md:w-56 lg:w-64 bg-navy/5 border-t md:border-t-0 md:border-l border-ice flex items-center justify-center p-3 relative overflow-hidden shrink-0">
+            <div class="w-32 h-32 md:w-full md:h-full max-h-64 rounded-xl overflow-hidden shadow-inner relative flex items-center justify-center bg-ice/40">
+                <img src="./facing_camera.jpeg" 
+                     onerror="this.onerror=null; this.src='./facing_camera_202609070747.jpeg'; this.classList.add('object-cover');"
+                     alt="Dr. Lindsay Dubock" 
+                     class="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-navy/30 via-transparent to-transparent pointer-events-none"></div>
             </div>
-
-            <div class="flex-1 flex flex-col justify-center w-full max-w-xl bg-white border border-ice rounded-xl p-4 md:p-5 shadow-xs">
-                
-                <!-- Unhurried Subtitle / Thought Display -->
-                <div class="mb-4">
-                    <div class="text-[10px] uppercase font-bold tracking-wider text-trust mb-1.5 flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-trust"></span>
-                        <span id="topicBadge">The Shift in General Practice</span>
-                    </div>
-                    <div class="min-h-[64px] flex items-center">
-                        <p id="liveTranscript" class="text-sm md:text-base text-navy font-medium leading-relaxed transition-all duration-300">
-                            "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium."
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-t border-ice/60 pt-3 flex items-center justify-between">
-                    <div class="text-[11px] font-medium text-slate/80">Diagnostic Reframing:</div>
-                    <div class="flex items-center space-x-1 bg-ice/40 p-0.5 rounded-lg text-xs">
-                        <button id="viewAttackBtn" onclick="setPerspective('attack')" class="px-2.5 py-1 rounded text-[11px] font-medium transition-all bg-white text-navy shadow-2xs">
-                            How it feels (Attack)
-                        </button>
-                        <button id="viewDataBtn" onclick="setPerspective('data')" class="px-2.5 py-1 rounded text-[11px] font-medium text-slate/70 hover:text-navy transition-all">
-                            What it is (Clinical Data)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Lens Explanation Text -->
-                <div id="lensExplanation" class="mt-2 text-xs text-slate/80 italic bg-ice/20 p-2.5 rounded border border-ice/50">
-                    "I am being attacked by someone who doesn't want to talk to me."
-                </div>
-
-            </div>
-
-        </main>
-
-        <footer class="bg-white border-t border-ice px-4 py-2.5 flex items-center justify-between shrink-0">
-            <div class="flex items-center space-x-2">
-                <span class="w-1.5 h-4 bg-orange rounded-full"></span>
-                <span class="text-xs font-bold text-navy">Over 90% of pushback is predictable.</span>
-            </div>
-            <div class="text-[11px] text-slate/75 hidden sm:block">
-                Predictable pushback can be intercepted.
-            </div>
-        </footer>
+        </div>
 
     </div>
 
-    <script>
-        // State variables
-        let isPlaying = false;
-        let currentTime = 0;
-        let playheadInterval = null;
-        let audioMode = 'files'; // 'files', 'custom', or 'synth'
-        let audioContext = null;
+    <!-- Modal Window (Hidden by default) -->
+    <div id="audioModal" class="fixed inset-0 z-50 bg-navy/70 backdrop-blur-xs flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        
+        <div class="bg-white border border-ice rounded-2xl shadow-2xl w-full max-w-xl flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="modalCard">
+            
+            <!-- Modal Header -->
+            <div class="bg-navy px-5 py-3.5 flex items-center justify-between text-white border-b border-ice/20">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-orange animate-pulse"></span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-ice/90">Dr. Lindsay • Audio Transcript</span>
+                </div>
+                
+                <button onclick="closeAudioModal()" class="text-ice/70 hover:text-white p-1 rounded-lg transition-colors cursor-pointer" title="Close">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
 
-        // Slide 1 Audio Files - Pointed directly to root directory
+            <!-- Modal Body: Real-time Word / Phrase Highlighting Display -->
+            <div class="p-6 overflow-y-auto max-h-[300px] text-base sm:text-lg leading-relaxed bg-cream/40" id="transcriptContainer">
+                <p id="speechBox" class="space-y-1">
+                    <!-- Spoken phrases will be rendered as interactive span tokens -->
+                </p>
+            </div>
+
+            <!-- Modal Footer: Playback Controls & Scrubber -->
+            <div class="bg-white px-5 py-4 border-t border-ice flex items-center justify-between space-x-4">
+                <button id="modalPlayBtn" onclick="toggleAudio()" 
+                        class="w-11 h-11 rounded-full bg-navy hover:bg-trust text-white flex items-center justify-center transition-transform active:scale-95 shadow-sm cursor-pointer shrink-0">
+                    <svg id="modalPlayIcon" class="w-5 h-5 ml-0.5 fill-current" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+
+                <!-- Scrubber Progress Bar -->
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="w-full bg-ice rounded-full h-2 overflow-hidden cursor-pointer" onclick="seekAudio(event)">
+                        <div id="progressBar" class="bg-orange h-full w-0 transition-all duration-200"></div>
+                    </div>
+                    <div class="flex justify-between text-[11px] font-mono text-slate/70 mt-1">
+                        <span id="currentTimeLabel">00:00</span>
+                        <span id="totalDurationLabel">00:46</span>
+                    </div>
+                </div>
+
+                <span id="sourceBadge" class="text-[10px] font-mono bg-ice/40 text-navy px-2 py-1 rounded">
+                    Voicebox WAV
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Transcript broken down into timed sentences/phrases
+        const phrases = [
+            { id: 0, start: 0.0, end: 6.2, text: "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium." },
+            { id: 1, start: 6.3, end: 11.2, text: "We are picking up the phone to patients who did not ask us to call." },
+            { id: 2, start: 11.3, end: 14.5, text: "Complex long-term conditions." },
+            { id: 3, start: 14.6, end: 18.0, text: "Weight management cohorts." },
+            { id: 4, start: 18.1, end: 24.5, text: "People who are already exhausted, defensive, or guarded before you even finish your name." },
+            { id: 5, start: 24.6, end: 30.5, text: "Over ninety percent of that pushback is entirely predictable." },
+            { id: 6, start: 30.6, end: 34.5, text: "And if it can be predicted — it can be intercepted." },
+            { id: 7, start: 34.6, end: 39.5, text: "Today is not about customer service scripts or telling you to 'stay positive.'" },
+            { id: 8, start: 39.6, end: 46.5, text: "It is about seeing patient hostility for what it really is: clinical data — not a personal attack." },
+            { id: 9, start: 46.6, end: 51.0, text: "Let's look at what's really happening beneath the waterline." }
+        ];
+
+        // Populate transcript tokens
+        const speechBox = document.getElementById('speechBox');
+        phrases.forEach((phrase) => {
+            const span = document.createElement('span');
+            span.id = `phrase-${phrase.id}`;
+            span.className = "dim-word inline-block mr-1.5 p-1 rounded transition-colors";
+            span.innerText = phrase.text;
+            speechBox.appendChild(span);
+        });
+
+        // Audio Objects
         const audioPart1 = new Audio('./HD_S01_Lindsay_Part1.wav');
         const audioPart2 = new Audio('./HD_S01_Lindsay_Part2.wav');
         let currentAudio = audioPart1;
-        let customAudio = null;
+        let isPlaying = false;
+        let ticker = null;
+        let part1Duration = 24.5; // default fallback duration for part 1
 
-        // Script Timeline matching Voicebox pacing (Part 1 and Part 2)
-        const timelineBeats = [
-            { time: 0, topic: "The Shift in General Practice", text: "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium.", reframe: "System contracts now drive outbound contact." },
-            { time: 7, topic: "Unsolicited Outreach", text: "We are picking up the phone to patients who did not ask us to call.", reframe: "To the patient, an unannounced ring is an unexpected intrusion." },
-            { time: 12, topic: "Complex Cohorts", text: "Complex long-term conditions. Weight management cohorts.", reframe: "Patients carrying high fatigue and vulnerability." },
-            { time: 18, topic: "The First 10 Seconds", text: "People who are already exhausted, defensive, or guarded before you even finish your name.", reframe: "Defensiveness is a shield, not an attack on you." },
-            { time: 24, topic: "The Predictability Anchor", text: "Over ninety percent of that pushback is entirely predictable.", reframe: "Predictable means it is manageable data." },
-            { time: 30, topic: "Clinical Mastery", text: "And if it can be predicted — it can be intercepted.", reframe: "Preparation replaces anxiety." },
-            { time: 34, topic: "Beyond Customer Service", text: "Today is not about customer service scripts or telling you to 'stay positive.'", reframe: "Frontline primary care requires clinical frameworks, not corporate fluff." },
-            { time: 39, topic: "The Waterline Paradigm", text: "It is about seeing patient hostility for what it really is: clinical data — not a personal attack.", reframe: "Hostility is an unexpressed signal of distress." },
-            { time: 45, topic: "Moving Forward", text: "Let's look at what's really happening beneath the waterline.", reframe: "We examine the 4 hidden drivers." }
-        ];
+        audioPart1.addEventListener('loadedmetadata', () => {
+            if (audioPart1.duration && !isNaN(audioPart1.duration)) {
+                part1Duration = audioPart1.duration;
+            }
+        });
 
-        // Ensure Part 1 chains cleanly into Part 2
         audioPart1.addEventListener('ended', () => {
             currentAudio = audioPart2;
-            audioPart2.play().catch(onAudioError);
+            audioPart2.play().catch(fallbackToSynthesizer);
         });
 
         audioPart2.addEventListener('ended', () => {
-            stopPlayback();
+            pausePlayback();
+            resetTranscript();
         });
 
-        function onAudioError(err) {
-            console.warn('WAV files not found at root path. Activating Speech Synthesizer fallback.', err);
-            audioMode = 'synth';
-            document.getElementById('audioSourceBadge').innerText = 'Audio: Demo Synthesizer';
-            document.getElementById('audioSourceBadge').classList.replace('text-ice/80', 'text-orange');
-            startSynthesizer();
-        }
-
-        function handleManualAudioFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            if (customAudio) {
-                customAudio.pause();
-            }
-            customAudio = new Audio(URL.createObjectURL(file));
-            audioMode = 'custom';
-            document.getElementById('audioSourceBadge').innerText = `File: ${file.name.slice(0, 14)}...`;
-            document.getElementById('audioSourceBadge').classList.replace('text-ice/80', 'text-trust');
-            
-            customAudio.addEventListener('ended', stopPlayback);
+        function openAudioModal() {
+            const modal = document.getElementById('audioModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
             startPlayback();
         }
 
-        function handleMasterPlayToggle() {
+        function closeAudioModal() {
+            const modal = document.getElementById('audioModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            pausePlayback();
+        }
+
+        function toggleAudio() {
             if (isPlaying) {
-                stopPlayback();
+                pausePlayback();
             } else {
                 startPlayback();
             }
@@ -213,110 +244,79 @@
 
         function startPlayback() {
             isPlaying = true;
-            document.getElementById('playIcon').innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-            document.getElementById('statusPrompt').innerText = "Playing briefing...";
+            document.getElementById('modalPlayIcon').innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
             
-            // Visual pulse ring
-            const ring = document.getElementById('rippleRing');
-            ring.classList.add('scale-125', 'opacity-100');
+            currentAudio.play().catch(fallbackToSynthesizer);
 
-            if (audioMode === 'custom' && customAudio) {
-                customAudio.play().catch(onAudioError);
-            } else if (audioMode === 'files') {
-                currentAudio.play().catch(onAudioError);
-            } else {
-                startSynthesizer();
-            }
-
-            // Sync ticker
-            playheadInterval = setInterval(() => {
-                if (audioMode === 'custom' && customAudio) {
-                    currentTime = Math.floor(customAudio.currentTime);
-                } else if (audioMode === 'files') {
-                    const offset = currentAudio === audioPart2 ? (audioPart1.duration || 19) : 0;
-                    currentTime = Math.floor(offset + currentAudio.currentTime);
-                } else {
-                    currentTime += 1;
-                }
-                
-                updateDisplay(currentTime);
-                if (currentTime >= 50) {
-                    stopPlayback();
-                }
-            }, 1000);
+            clearInterval(ticker);
+            ticker = setInterval(updateLiveProgress, 100);
         }
 
-        function stopPlayback() {
+        function pausePlayback() {
             isPlaying = false;
-            clearInterval(playheadInterval);
-            
+            document.getElementById('modalPlayIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
             if (currentAudio) currentAudio.pause();
-            if (customAudio) customAudio.pause();
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-
-            document.getElementById('playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
-            document.getElementById('statusPrompt').innerText = "Click to hear Dr. Lindsay";
-            
-            const ring = document.getElementById('rippleRing');
-            ring.classList.remove('scale-125', 'opacity-100');
+            if ('speechSynthesis' in window) window.speechSynthesis.pause();
+            clearInterval(ticker);
         }
 
-        function startSynthesizer() {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-
-            const fullSpeech = "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium. We are picking up the phone to patients who did not ask us to call. Complex long-term conditions. Weight management cohorts. People who are already exhausted, defensive, or guarded before you even finish your name. Over ninety percent of that pushback is entirely predictable. And if it can be predicted, it can be intercepted. Today is not about customer service scripts or telling you to stay positive. It is about seeing patient hostility for what it really is: clinical data, not a personal attack. Let's look at what's really happening beneath the waterline.";
-            
-            const utterance = new SpeechSynthesisUtterance(fullSpeech);
-            utterance.rate = 0.92; // Unhurried peer-to-peer delivery
-            utterance.pitch = 1.0;
-            
-            // Prefer natural British voice if present
-            const voices = window.speechSynthesis.getVoices();
-            const ukVoice = voices.find(v => v.lang === 'en-GB' || v.name.includes('UK') || v.name.includes('British'));
-            if (ukVoice) utterance.voice = ukVoice;
-
-            utterance.onend = stopPlayback;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function updateDisplay(seconds) {
-            const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-            const s = String(seconds % 60).padStart(2, '0');
-            document.getElementById('timerLabel').innerText = `${m}:${s}`;
-
-            for (let i = timelineBeats.length - 1; i >= 0; i--) {
-                if (seconds >= timelineBeats[i].time) {
-                    const beat = timelineBeats[i];
-                    document.getElementById('liveTranscript').innerText = `"${beat.text}"`;
-                    document.getElementById('topicBadge').innerText = beat.topic;
-                    
-                    // Update lens explanation if currently on data view
-                    if (currentPerspective === 'data') {
-                        document.getElementById('lensExplanation').innerText = `"${beat.reframe}"`;
-                    }
-                    break;
-                }
-            }
-        }
-
-        let currentPerspective = 'attack';
-        function setPerspective(type) {
-            currentPerspective = type;
-            const btnAttack = document.getElementById('viewAttackBtn');
-            const btnData = document.getElementById('viewDataBtn');
-            const explanation = document.getElementById('lensExplanation');
-
-            if (type === 'attack') {
-                btnAttack.className = "px-2.5 py-1 rounded text-[11px] font-medium transition-all bg-white text-navy shadow-2xs";
-                btnData.className = "px-2.5 py-1 rounded text-[11px] font-medium text-slate/70 hover:text-navy transition-all";
-                explanation.innerText = '"I am being attacked by someone who doesn’t want to talk to me."';
-                explanation.className = "mt-2 text-xs text-slate/80 italic bg-ice/20 p-2.5 rounded border border-ice/50";
+        function updateLiveProgress() {
+            let totalCurrent = 0;
+            if (currentAudio === audioPart1) {
+                totalCurrent = audioPart1.currentTime;
             } else {
-                btnData.className = "px-2.5 py-1 rounded text-[11px] font-medium transition-all bg-white text-trust font-bold shadow-2xs";
-                btnAttack.className = "px-2.5 py-1 rounded text-[11px] font-medium text-slate/70 hover:text-navy transition-all";
-                explanation.innerText = '"The patient is frightened or defensive. This pushback is clinical data about what they are carrying."';
-                explanation.className = "mt-2 text-xs text-navy font-semibold bg-trust/10 p-2.5 rounded border border-trust/30";
+                totalCurrent = part1Duration + audioPart2.currentTime;
+            }
+
+            const totalExpected = 50.0;
+            const pct = Math.min(100, (totalCurrent / totalExpected) * 100);
+            document.getElementById('progressBar').style.width = `${pct}%`;
+
+            const m = String(Math.floor(totalCurrent / 60)).padStart(2, '0');
+            const s = String(Math.floor(totalCurrent % 60)).padStart(2, '0');
+            document.getElementById('currentTimeLabel').innerText = `${m}:${s}`;
+
+            // Highlight corresponding phrase
+            phrases.forEach((phrase) => {
+                const el = document.getElementById(`phrase-${phrase.id}`);
+                if (totalCurrent >= phrase.start && totalCurrent <= phrase.end) {
+                    el.className = "active-word-highlight inline-block mr-1.5 p-1 rounded";
+                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else if (totalCurrent > phrase.end) {
+                    el.className = "text-navy/80 inline-block mr-1.5 p-1 rounded font-medium";
+                } else {
+                    el.className = "dim-word inline-block mr-1.5 p-1 rounded";
+                }
+            });
+        }
+
+        function resetTranscript() {
+            phrases.forEach((phrase) => {
+                const el = document.getElementById(`phrase-${phrase.id}`);
+                el.className = "dim-word inline-block mr-1.5 p-1 rounded";
+            });
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('currentTimeLabel').innerText = '00:00';
+            currentAudio = audioPart1;
+            audioPart1.currentTime = 0;
+            audioPart2.currentTime = 0;
+        }
+
+        function fallbackToSynthesizer(err) {
+            console.warn("Local WAVs not accessible, using speech synthesis fallback:", err);
+            document.getElementById('sourceBadge').innerText = "Synthesizer Mode";
+            document.getElementById('sourceBadge').className = "text-[10px] font-mono bg-orange/20 text-orange px-2 py-1 rounded";
+            
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const fullText = phrases.map(p => p.text).join(' ');
+                const utterance = new SpeechSynthesisUtterance(fullText);
+                utterance.rate = 0.92;
+                utterance.onend = () => {
+                    pausePlayback();
+                    resetTranscript();
+                };
+                window.speechSynthesis.speak(utterance);
             }
         }
     </script>
