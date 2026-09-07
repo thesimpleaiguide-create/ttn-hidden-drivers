@@ -36,22 +36,34 @@
         ::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; }
 
-        .active-word-highlight {
-            background-color: rgba(254, 80, 0, 0.15);
-            color: #0C2340;
-            font-weight: 700;
-            border-bottom: 2px solid #FE5000;
-            transition: all 0.25s ease;
+        .word-token {
+            display: inline-block;
+            margin: 0 2.5px 3px 0;
+            padding: 1px 3px;
+            border-radius: 4px;
+            transition: all 0.15s ease-out;
         }
-        .dim-word {
-            color: #718096;
-            transition: all 0.3s ease;
+        .word-active {
+            background-color: #FE5000;
+            color: #ffffff !important;
+            font-weight: 700;
+            transform: scale(1.06);
+            box-shadow: 0 2px 8px rgba(254, 80, 0, 0.35);
+        }
+        .word-spoken {
+            color: #0C2340;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        .word-upcoming {
+            color: #94A3B8;
+            opacity: 0.65;
+            font-weight: 400;
         }
     </style>
 </head>
 <body class="bg-white text-slate font-sans select-none h-full flex flex-col justify-center p-3 sm:p-4">
 
-    <!-- Card Container -->
     <div class="w-full max-w-4xl mx-auto bg-cream/60 border border-ice/80 rounded-2xl shadow-xs overflow-hidden flex flex-col md:flex-row relative">
         
         <!-- Left / Center: Personal Written Introduction -->
@@ -87,7 +99,6 @@
 
                 <button onclick="openAudioModal()" 
                         class="group inline-flex items-center space-x-2.5 bg-navy hover:bg-trust text-white px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 shadow-sm hover:shadow active:scale-95 cursor-pointer">
-                    <!-- Headset/Audio Soundwave Icon -->
                     <span class="relative flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-orange"></span>
@@ -100,7 +111,6 @@
             </div>
         </div>
 
-        <!-- Right Column: Dr. Lindsay Portrait -->
         <div class="w-full md:w-56 lg:w-64 bg-navy/5 border-t md:border-t-0 md:border-l border-ice flex items-center justify-center p-3 relative overflow-hidden shrink-0">
             <div class="w-32 h-32 md:w-full md:h-full max-h-64 rounded-xl overflow-hidden shadow-inner relative flex items-center justify-center bg-ice/40">
                 <img src="./facing_camera.jpeg" 
@@ -113,7 +123,6 @@
 
     </div>
 
-    <!-- Modal Window (Hidden by default) -->
     <div id="audioModal" class="fixed inset-0 z-50 bg-navy/70 backdrop-blur-xs flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
         
         <div class="bg-white border border-ice rounded-2xl shadow-2xl w-full max-w-xl flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="modalCard">
@@ -122,7 +131,7 @@
             <div class="bg-navy px-5 py-3.5 flex items-center justify-between text-white border-b border-ice/20">
                 <div class="flex items-center space-x-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-orange animate-pulse"></span>
-                    <span class="text-xs font-semibold uppercase tracking-wider text-ice/90">Dr. Lindsay • Audio Transcript</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-ice/90">Dr. Lindsay • Clinical Briefing</span>
                 </div>
                 
                 <button onclick="closeAudioModal()" class="text-ice/70 hover:text-white p-1 rounded-lg transition-colors cursor-pointer" title="Close">
@@ -132,14 +141,14 @@
                 </button>
             </div>
 
-            <!-- Modal Body: Real-time Word / Phrase Highlighting Display -->
-            <div class="p-6 overflow-y-auto max-h-[300px] text-base sm:text-lg leading-relaxed bg-cream/40" id="transcriptContainer">
-                <p id="speechBox" class="space-y-1">
-                    <!-- Spoken phrases will be rendered as interactive span tokens -->
-                </p>
+            <!-- Modal Body: Real-time Word-by-Word Highlighting Display -->
+            <div class="p-6 overflow-y-auto max-h-[300px] text-base sm:text-lg leading-relaxed bg-cream/40 scroll-smooth" id="transcriptContainer">
+                <div id="speechBox" class="leading-loose">
+                    <!-- Word tokens rendered dynamically -->
+                </div>
             </div>
 
-            <!-- Modal Footer: Playback Controls & Scrubber -->
+            <!-- Modal Footer: Playback Controls & Clean Scrubber (Badge Removed) -->
             <div class="bg-white px-5 py-4 border-t border-ice flex items-center justify-between space-x-4">
                 <button id="modalPlayBtn" onclick="toggleAudio()" 
                         class="w-11 h-11 rounded-full bg-navy hover:bg-trust text-white flex items-center justify-center transition-transform active:scale-95 shadow-sm cursor-pointer shrink-0">
@@ -150,61 +159,95 @@
 
                 <!-- Scrubber Progress Bar -->
                 <div class="flex-1 flex flex-col justify-center">
-                    <div class="w-full bg-ice rounded-full h-2 overflow-hidden cursor-pointer" onclick="seekAudio(event)">
-                        <div id="progressBar" class="bg-orange h-full w-0 transition-all duration-200"></div>
+                    <div class="w-full bg-ice rounded-full h-2.5 overflow-hidden cursor-pointer" onclick="seekAudio(event)">
+                        <div id="progressBar" class="bg-orange h-full w-0 transition-all duration-100"></div>
                     </div>
-                    <div class="flex justify-between text-[11px] font-mono text-slate/70 mt-1">
+                    <div class="flex justify-between text-[11px] font-mono text-slate/70 mt-1.5">
                         <span id="currentTimeLabel">00:00</span>
                         <span id="totalDurationLabel">00:46</span>
                     </div>
                 </div>
-
-                <span id="sourceBadge" class="text-[10px] font-mono bg-ice/40 text-navy px-2 py-1 rounded">
-                    Voicebox WAV
-                </span>
             </div>
 
         </div>
     </div>
 
     <script>
-        // Transcript broken down into timed sentences/phrases
-        const phrases = [
-            { id: 0, start: 0.0, end: 6.2, text: "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium." },
-            { id: 1, start: 6.3, end: 11.2, text: "We are picking up the phone to patients who did not ask us to call." },
-            { id: 2, start: 11.3, end: 14.5, text: "Complex long-term conditions." },
-            { id: 3, start: 14.6, end: 18.0, text: "Weight management cohorts." },
-            { id: 4, start: 18.1, end: 24.5, text: "People who are already exhausted, defensive, or guarded before you even finish your name." },
-            { id: 5, start: 24.6, end: 30.5, text: "Over ninety percent of that pushback is entirely predictable." },
-            { id: 6, start: 30.6, end: 34.5, text: "And if it can be predicted — it can be intercepted." },
-            { id: 7, start: 34.6, end: 39.5, text: "Today is not about customer service scripts or telling you to 'stay positive.'" },
-            { id: 8, start: 39.6, end: 46.5, text: "It is about seeing patient hostility for what it really is: clinical data — not a personal attack." },
-            { id: 9, start: 46.6, end: 51.0, text: "Let's look at what's really happening beneath the waterline." }
+        // Exact timed sentence segments matching Dr. Lindsay's Voicebox render
+        const timedPhrases = [
+            { start: 0.0, end: 5.8, text: "If you work in primary care right now, you know the ground has shifted under proactive care contracts and the GP Premium." },
+            { start: 5.9, end: 10.4, text: "We are picking up the phone to patients who did not ask us to call." },
+            { start: 10.5, end: 13.5, text: "Complex long-term conditions." },
+            { start: 13.6, end: 16.8, text: "Weight management cohorts." },
+            { start: 16.9, end: 23.4, text: "People who are already exhausted, defensive, or guarded before you even finish your name." },
+            { start: 23.5, end: 28.6, text: "Over ninety percent of that pushback is entirely predictable." },
+            { start: 28.7, end: 32.4, text: "And if it can be predicted — it can be intercepted." },
+            { start: 32.5, end: 37.2, text: "Today is not about customer service scripts or telling you to 'stay positive.'" },
+            { start: 37.3, end: 43.6, text: "It is about seeing patient hostility for what it really is: clinical data — not a personal attack." },
+            { start: 43.7, end: 47.0, text: "Let's look at what's really happening beneath the waterline." }
         ];
 
-        // Populate transcript tokens
+        // Tokenize phrases into individual word tokens with weighted proportional durations
+        const allWords = [];
+        let globalWordIdx = 0;
+
+        timedPhrases.forEach((phrase) => {
+            const words = phrase.text.split(' ');
+            const totalChars = words.reduce((acc, w) => acc + Math.max(1, w.length), 0);
+            const phraseDuration = phrase.end - phrase.start;
+            let currentOffset = phrase.start;
+
+            words.forEach((w) => {
+                const wordWeight = Math.max(1, w.length) / totalChars;
+                const wordDuration = phraseDuration * wordWeight;
+                allWords.push({
+                    id: globalWordIdx,
+                    word: w,
+                    start: currentOffset,
+                    end: currentOffset + wordDuration
+                });
+                currentOffset += wordDuration;
+                globalWordIdx++;
+            });
+        });
+
+        // Populate the transcript container with word spans
         const speechBox = document.getElementById('speechBox');
-        phrases.forEach((phrase) => {
+        allWords.forEach((item) => {
             const span = document.createElement('span');
-            span.id = `phrase-${phrase.id}`;
-            span.className = "dim-word inline-block mr-1.5 p-1 rounded transition-colors";
-            span.innerText = phrase.text;
+            span.id = `w-${item.id}`;
+            span.className = "word-token word-upcoming";
+            span.innerText = item.word;
             speechBox.appendChild(span);
         });
 
-        // Audio Objects
         const audioPart1 = new Audio('./HD_S01_Lindsay_Part1.wav');
         const audioPart2 = new Audio('./HD_S01_Lindsay_Part2.wav');
         let currentAudio = audioPart1;
         let isPlaying = false;
         let ticker = null;
-        let part1Duration = 24.5; // default fallback duration for part 1
+        let part1Duration = 23.4;
+        let totalDuration = 46.0;
 
         audioPart1.addEventListener('loadedmetadata', () => {
             if (audioPart1.duration && !isNaN(audioPart1.duration)) {
                 part1Duration = audioPart1.duration;
+                updateTotalDurationDisplay();
             }
         });
+
+        audioPart2.addEventListener('loadedmetadata', () => {
+            if (audioPart2.duration && !isNaN(audioPart2.duration)) {
+                totalDuration = part1Duration + audioPart2.duration;
+                updateTotalDurationDisplay();
+            }
+        });
+
+        function updateTotalDurationDisplay() {
+            const m = String(Math.floor(totalDuration / 60)).padStart(2, '0');
+            const s = String(Math.floor(totalDuration % 60)).padStart(2, '0');
+            document.getElementById('totalDurationLabel').innerText = `${m}:${s}`;
+        }
 
         audioPart1.addEventListener('ended', () => {
             currentAudio = audioPart2;
@@ -249,7 +292,7 @@
             currentAudio.play().catch(fallbackToSynthesizer);
 
             clearInterval(ticker);
-            ticker = setInterval(updateLiveProgress, 100);
+            ticker = setInterval(updateLiveProgress, 40);
         }
 
         function pausePlayback() {
@@ -268,50 +311,98 @@
                 totalCurrent = part1Duration + audioPart2.currentTime;
             }
 
-            const totalExpected = 50.0;
-            const pct = Math.min(100, (totalCurrent / totalExpected) * 100);
+            const pct = Math.min(100, (totalCurrent / totalDuration) * 100);
             document.getElementById('progressBar').style.width = `${pct}%`;
 
             const m = String(Math.floor(totalCurrent / 60)).padStart(2, '0');
             const s = String(Math.floor(totalCurrent % 60)).padStart(2, '0');
             document.getElementById('currentTimeLabel').innerText = `${m}:${s}`;
 
-            // Highlight corresponding phrase
-            phrases.forEach((phrase) => {
-                const el = document.getElementById(`phrase-${phrase.id}`);
-                if (totalCurrent >= phrase.start && totalCurrent <= phrase.end) {
-                    el.className = "active-word-highlight inline-block mr-1.5 p-1 rounded";
-                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                } else if (totalCurrent > phrase.end) {
-                    el.className = "text-navy/80 inline-block mr-1.5 p-1 rounded font-medium";
+            // Real-time word-by-word state evaluation
+            let activeWordEl = null;
+
+            allWords.forEach((item) => {
+                const el = document.getElementById(`w-${item.id}`);
+                if (totalCurrent >= item.start && totalCurrent < item.end) {
+                    el.className = "word-token word-active";
+                    activeWordEl = el;
+                } else if (totalCurrent >= item.end) {
+                    el.className = "word-token word-spoken";
                 } else {
-                    el.className = "dim-word inline-block mr-1.5 p-1 rounded";
+                    el.className = "word-token word-upcoming";
                 }
             });
+
+            // Auto-scroll transcript container to follow speaking position
+            if (activeWordEl) {
+                const container = document.getElementById('transcriptContainer');
+                const offsetTop = activeWordEl.offsetTop - container.offsetTop;
+                if (Math.abs(container.scrollTop - (offsetTop - 80)) > 40) {
+                    container.scrollTo({ top: offsetTop - 80, behavior: 'smooth' });
+                }
+            }
+        }
+
+        function seekAudio(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const targetPct = clickX / rect.width;
+            const targetTime = targetPct * totalDuration;
+
+            if (targetTime < part1Duration) {
+                if (currentAudio === audioPart2) {
+                    audioPart2.pause();
+                    audioPart2.currentTime = 0;
+                    currentAudio = audioPart1;
+                }
+                audioPart1.currentTime = targetTime;
+            } else {
+                if (currentAudio === audioPart1) {
+                    audioPart1.pause();
+                    audioPart1.currentTime = part1Duration;
+                    currentAudio = audioPart2;
+                }
+                audioPart2.currentTime = targetTime - part1Duration;
+            }
+
+            if (isPlaying) {
+                currentAudio.play().catch(fallbackToSynthesizer);
+            }
+            updateLiveProgress();
         }
 
         function resetTranscript() {
-            phrases.forEach((phrase) => {
-                const el = document.getElementById(`phrase-${phrase.id}`);
-                el.className = "dim-word inline-block mr-1.5 p-1 rounded";
+            allWords.forEach((item) => {
+                const el = document.getElementById(`w-${item.id}`);
+                el.className = "word-token word-upcoming";
             });
             document.getElementById('progressBar').style.width = '0%';
             document.getElementById('currentTimeLabel').innerText = '00:00';
             currentAudio = audioPart1;
             audioPart1.currentTime = 0;
             audioPart2.currentTime = 0;
+            document.getElementById('transcriptContainer').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function fallbackToSynthesizer(err) {
-            console.warn("Local WAVs not accessible, using speech synthesis fallback:", err);
-            document.getElementById('sourceBadge').innerText = "Synthesizer Mode";
-            document.getElementById('sourceBadge').className = "text-[10px] font-mono bg-orange/20 text-orange px-2 py-1 rounded";
-            
+            console.warn("Audio file issue; initiating synthesizer fallback:", err);
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const fullText = phrases.map(p => p.text).join(' ');
+                const fullText = timedPhrases.map(p => p.text).join(' ');
                 const utterance = new SpeechSynthesisUtterance(fullText);
-                utterance.rate = 0.92;
+                utterance.rate = 0.94;
+                utterance.onboundary = function(event) {
+                    if (event.name === 'word') {
+                        // Approximate word advancement in fallback mode
+                        const approxIdx = Math.min(allWords.length - 1, Math.floor((event.charIndex / fullText.length) * allWords.length));
+                        allWords.forEach((w, idx) => {
+                            const el = document.getElementById(`w-${w.id}`);
+                            if (idx === approxIdx) el.className = "word-token word-active";
+                            else if (idx < approxIdx) el.className = "word-token word-spoken";
+                            else el.className = "word-token word-upcoming";
+                        });
+                    }
+                };
                 utterance.onend = () => {
                     pausePlayback();
                     resetTranscript();
