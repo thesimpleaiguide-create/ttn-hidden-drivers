@@ -62,43 +62,44 @@
         }
     </style>
 </head>
-<body class="bg-white text-slate font-sans select-none h-full flex flex-col justify-center p-3 sm:p-4">
+<body class="bg-slate-50/50 text-slate font-sans select-none h-full w-full flex items-center justify-center p-2 sm:p-4 md:p-6">
 
-    <div class="w-full max-w-4xl mx-auto bg-cream/60 border border-ice/80 rounded-2xl shadow-xs overflow-hidden flex flex-col md:flex-row relative">
+    <div class="w-full max-w-5xl h-full md:h-auto min-h-[360px] bg-white border border-ice rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row relative">
         
         <!-- Left / Center: Personal Written Introduction -->
-        <div class="flex-1 p-5 sm:p-7 flex flex-col justify-between">
-            <div>
-                <div class="flex items-center space-x-2 text-[11px] font-bold tracking-wider text-trust uppercase mb-3">
-                    <span class="w-2 h-2 rounded-full bg-orange animate-pulse"></span>
+        <div class="flex-1 p-6 sm:p-8 md:p-10 flex flex-col justify-between">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2 text-xs font-bold tracking-wider text-trust uppercase">
+                    <span class="w-2.5 h-2.5 rounded-full bg-orange animate-pulse"></span>
                     <span>Direct Guidance • Primary Care Outreach</span>
                 </div>
 
-                <div class="space-y-3 text-slate/90 text-sm sm:text-[15px] leading-relaxed font-normal">
-                    <p class="font-semibold text-navy text-base sm:text-lg">
-                        I want to talk to you about the calls that go wrong.
-                    </p>
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-semibold text-navy leading-tight tracking-tight">
+                    I want to talk to you about the calls that go wrong.
+                </h1>
+
+                <div class="space-y-3.5 text-slate/90 text-sm sm:text-base md:text-[17px] leading-relaxed font-normal max-w-2xl">
                     <p>
                         Not the ones where someone's difficult for no reason. The ones where you dial, say the practice name, and it falls apart before you've finished your sentence.
                     </p>
                     <p>
                         This course is for the people who make those calls — care coordinators, link workers, anyone doing proactive outreach under GP Premium.
                     </p>
-                    <p class="text-slate/75 italic">
+                    <p class="text-slate/75 italic font-medium">
                         We'll take it slowly. One phase at a time.
                     </p>
                 </div>
             </div>
 
             <!-- Action Bar with Audio Pop-out Icon Button -->
-            <div class="mt-5 pt-4 border-t border-ice flex items-center justify-between">
-                <div class="text-xs font-semibold text-navy">
+            <div class="mt-8 pt-5 border-t border-ice/80 flex flex-wrap items-center justify-between gap-4">
+                <div class="text-sm font-semibold text-navy">
                     Dr. Lindsay Dubock
-                    <span class="block text-[11px] font-normal text-slate/60">Director, The Training Network</span>
+                    <span class="block text-xs font-normal text-slate/60">Director, The Training Network</span>
                 </div>
 
                 <button onclick="openAudioModal()" 
-                        class="group inline-flex items-center space-x-2.5 bg-navy hover:bg-trust text-white px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 shadow-sm hover:shadow active:scale-95 cursor-pointer">
+                        class="group inline-flex items-center space-x-3 bg-navy hover:bg-trust text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-sm hover:shadow active:scale-95 cursor-pointer">
                     <span class="relative flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-orange"></span>
@@ -111,14 +112,13 @@
             </div>
         </div>
 
-        <div class="w-full md:w-56 lg:w-64 bg-navy/5 border-t md:border-t-0 md:border-l border-ice flex items-center justify-center p-3 relative overflow-hidden shrink-0">
-            <div class="w-32 h-32 md:w-full md:h-full max-h-64 rounded-xl overflow-hidden shadow-inner relative flex items-center justify-center bg-ice/40">
-                <img src="./facing_camera.jpeg" 
-                     onerror="this.onerror=null; this.src='./facing_camera_202609070747.jpeg'; this.classList.add('object-cover');"
-                     alt="Dr. Lindsay Dubock" 
-                     class="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-t from-navy/30 via-transparent to-transparent pointer-events-none"></div>
-            </div>
+        <!-- Right Side: Dr. Lindsay Portrait filling vertical space with clean facial crop -->
+        <div class="w-full md:w-72 lg:w-80 bg-navy/5 border-t md:border-t-0 md:border-l border-ice/80 relative overflow-hidden shrink-0 flex items-center justify-center min-h-[260px] md:min-h-full">
+            <img src="./facing_camera.jpeg" 
+                 onerror="this.onerror=null; this.src='./facing_camera_202609070747.jpeg'; this.classList.add('object-cover');"
+                 alt="Dr. Lindsay Dubock" 
+                 class="w-full h-full object-cover object-[24%_12%] transition-transform duration-700 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-navy/40 via-transparent to-transparent pointer-events-none"></div>
         </div>
 
     </div>
